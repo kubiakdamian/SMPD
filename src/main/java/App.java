@@ -31,10 +31,10 @@ public class App {
     }
 
     public static void main(String[] args) {
-        FeatureFinder featureFinder = new FeatureFinder(acerTable, quercusTable);
+        ElementFinder elementFinder = new ElementFinder(acerTable, quercusTable);
 
-        featureFinder.findBestWithoutSFS();
-        featureFinder.findBestWithSFS();
+        elementFinder.findBestWithoutSFS();
+        elementFinder.findBestWithSFS();
 
         Classifier classifier = new Classifier(wholeList, acerList, quercusList);
 

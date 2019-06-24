@@ -4,12 +4,12 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
-class FeatureFinder {
+class ElementFinder {
 
     private double[][] acerTable;
     private double[][] quercusTable;
 
-    FeatureFinder(double[][] acerTable, double[][] quercusTable) {
+    ElementFinder(double[][] acerTable, double[][] quercusTable) {
         this.acerTable = acerTable;
         this.quercusTable = quercusTable;
     }
