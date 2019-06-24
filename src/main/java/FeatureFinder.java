@@ -1,21 +1,21 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class FeatureFinder {
+class FeatureFinder {
 
     private double[][] acerTable;
     private double[][] quercusTable;
 
-    public FeatureFinder(double[][] acerTable, double[][] quercusTable) throws IOException {
+    FeatureFinder(double[][] acerTable, double[][] quercusTable) {
         this.acerTable = acerTable;
         this.quercusTable = quercusTable;
     }
 
-    public void findBestWithoutSFS() {
+    void findBestWithoutSFS() {
+        System.out.println("BEZ SFS");
         Scanner scanner = new Scanner(System.in);
         int chosenFeaturesNumber;
         long start;
@@ -54,7 +54,8 @@ public class FeatureFinder {
         System.out.println("CZAS WYKONANIA BEZ SFS: " + duration + "\n");
     }
 
-    public void findBestWithSFS() {
+    void findBestWithSFS() {
+        System.out.println("SFS");
         Scanner scanner = new Scanner(System.in);
         int n;
         long start;
@@ -74,7 +75,7 @@ public class FeatureFinder {
 
         end = System.nanoTime();
         double duration = (end - start) / 1000000000.0;
-        System.out.println("CZAS WYKONANIA Z SFS: " + duration +"\n");
+        System.out.println("CZAS WYKONANIA Z SFS: " + duration + "\n");
     }
 
     private double fisher(double[] vectorAcer, double[] vectorQuercus) {

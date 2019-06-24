@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SMPD_PROGRAM" target="7" />
+      <module name="SMPD_PROGRAM" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class App {
-    public static final int COLUMNS_NUMBER = 64;
+    static final int COLUMNS_NUMBER = 64;
 
     //Feature finder data
     private static int acerCounter;
@@ -30,7 +30,7 @@ public class App {
         classifierInit(fileData);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         FeatureFinder featureFinder = new FeatureFinder(acerTable, quercusTable);
 
         featureFinder.findBestWithoutSFS();
@@ -39,6 +39,7 @@ public class App {
         Classifier classifier = new Classifier(wholeList, acerList, quercusList);
 
         classifier.classify();
+        classifier.classifyForBootstrap();
     }
 
     private static String[] loadFile() throws IOException {

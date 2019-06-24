@@ -1,14 +1,17 @@
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
-public class Classifier {
+class Classifier {
     private List<ClassifierElement> shuffledClasses;
     private List<ClassifierElement> acerList;
     private List<ClassifierElement> quercusList;
     private List<ClassifierElement> trainingList;
 
-    public Classifier(List<ClassifierElement> wholeList, List<ClassifierElement> acerList, List<ClassifierElement> quercusList) {
+    Classifier(List<ClassifierElement> wholeList, List<ClassifierElement> acerList, List<ClassifierElement> quercusList) {
         this.shuffledClasses = wholeList;
         Collections.shuffle(shuffledClasses);
 
@@ -17,14 +20,50 @@ public class Classifier {
     }
 
 
-    public void classify() {
+    void classify() {
+        System.out.println("Klasyfikacje:");
         Scanner scanner = new Scanner(System.in);
+
         System.out.println("Wprowadź jaki % zbioru ma stanowić zbiór testowy");
         int testPercent = scanner.nextInt();
+
         System.out.println("Wprowadź parametr k");
         int kParameter = scanner.nextInt();
 
         trainingList = shuffledClasses.subList(0, (100 - testPercent) * shuffledClasses.size() / 100);
+
+        NNMethod();
+        NMMethod();
+        KNNMethod(kParameter);
+    }
+
+    void classifyForBootstrap() {
+        System.out.println("Bootstrap:");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Wprowadź jaki % zbioru ma stanowić zbiór testowy");
+        int testPercent = scanner.nextInt();
+
+        System.out.println("Wprowadź liczbę iteracji");
+        int iterations = scanner.nextInt();
+
+        System.out.println("Wprowadź parametr k");
+        int kParameter = scanner.nextInt();
+
+        Set<ClassifierElement> trainingSet = new HashSet<>();
+
+        for (int i = 0; i < iterations; i++) {
+            for (int j = 0; j < shuffledClasses.size() * testPercent / 100; j++) {
+                double randNumber = Math.random();
+                randNumber = randNumber * (shuffledClasses.size() - 1);
+                int random = (int) randNumber;
+
+                trainingSet.add(shuffledClasses.get(random));
+            }
+        }
+
+        trainingList = new ArrayList<>(trainingSet);
+
         NNMethod();
         NMMethod();
         KNNMethod(kParameter);
