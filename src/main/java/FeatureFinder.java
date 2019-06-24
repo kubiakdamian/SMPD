@@ -1,24 +1,18 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class FeatureFinder {
-    private static final int ALL_FEATURES_NUMBER = 64;
 
-    private int acerCounter;
-    private int quercusCounter;
     private double[][] acerTable;
     private double[][] quercusTable;
 
-    public FeatureFinder() throws IOException {
-        String[] fileData = loadFile();
-        tableMatrixInit(fileData);
+    public FeatureFinder(double[][] acerTable, double[][] quercusTable) throws IOException {
+        this.acerTable = acerTable;
+        this.quercusTable = quercusTable;
     }
 
     public void findBestWithoutSFS() {
@@ -34,13 +28,13 @@ public class FeatureFinder {
 
         Set<Element> elements = new TreeSet<>();
 
-        int[] array = new int[ALL_FEATURES_NUMBER];
+        int[] array = new int[App.COLUMNS_NUMBER];
 
-        for (int i = 0; i < ALL_FEATURES_NUMBER; i++) {
+        for (int i = 0; i < App.COLUMNS_NUMBER; i++) {
             array[i] = i;
         }
 
-        List<Integer[]> combinations = CombinationGenerator.generateCombinations(array, ALL_FEATURES_NUMBER, chosenFeaturesNumber);
+        List<Integer[]> combinations = CombinationGenerator.generateCombinations(array, App.COLUMNS_NUMBER, chosenFeaturesNumber);
 
         for (Integer[] combination : combinations) {
             for (Integer index : combination) {
@@ -57,7 +51,7 @@ public class FeatureFinder {
 
         end = System.nanoTime();
         double duration = (end - start) / 1000000000.0;
-        System.out.println("CZAS WYKONANIA BEZ SFS: " + duration);
+        System.out.println("CZAS WYKONANIA BEZ SFS: " + duration + "\n");
     }
 
     public void findBestWithSFS() {
@@ -80,7 +74,7 @@ public class FeatureFinder {
 
         end = System.nanoTime();
         double duration = (end - start) / 1000000000.0;
-        System.out.println("CZAS WYKONANIA Z SFS: " + duration);
+        System.out.println("CZAS WYKONANIA Z SFS: " + duration +"\n");
     }
 
     private double fisher(double[] vectorAcer, double[] vectorQuercus) {
@@ -154,67 +148,13 @@ public class FeatureFinder {
         }
     }
 
-    private void tableMatrixInit(String[] fileData) {
-        acerTable = new double[64][acerCounter];
-        quercusTable = new double[64][quercusCounter];
-        int acerRowCounter = 0;
-        int quercusRowCounter = 0;
-
-        for (String row : fileData) {
-            int columnCounter = 0;
-            List<String> val = Arrays.asList(row.split(","));
-            List<String> values = new ArrayList<>(val);
-            String name = values.get(0);
-            values.remove(0);
-
-            for (String value : values) {
-                double parsedValue = Double.parseDouble(value);
-                if (name.contains("Acer")) {
-                    acerTable[columnCounter][acerRowCounter] = parsedValue;
-                } else if (name.contains("Quercus")) {
-                    quercusTable[columnCounter][quercusRowCounter] = parsedValue;
-                }
-                columnCounter++;
-            }
-
-            if (name.contains("Acer")) {
-                acerRowCounter++;
-            } else if (name.contains("Quercus")) {
-                quercusRowCounter++;
-            }
-        }
-    }
-
-    private String[] loadFile() throws IOException {
-        FileReader fileReader = new FileReader("Maple_Oak.txt");
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        List<String> rows = new ArrayList<>();
-        String row;
-
-        while ((row = bufferedReader.readLine()) != null) {
-            rows.add(row);
-            if (row.contains("Acer")) {
-                acerCounter++;
-            } else if (row.contains("Quercus")) {
-                quercusCounter++;
-            }
-        }
-        bufferedReader.close();
-
-        rows.remove(0);
-
-        String[] array = new String[rows.size()];
-
-        return rows.toArray(array);
-    }
-
     private SFSObject fisherOneOnly() {
         SFSObject sfsObject = new SFSObject();
 
         double max = fisher(acerTable[0], quercusTable[0]);
         int maxIndex = 0;
 
-        for (int i = 1; i < ALL_FEATURES_NUMBER; i++) {
+        for (int i = 1; i < App.COLUMNS_NUMBER; i++) {
             double fisherResult = fisher(acerTable[i], quercusTable[i]);
             if (fisherResult > max) {
                 max = fisherResult;
